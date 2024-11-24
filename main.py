@@ -12,7 +12,13 @@ def main():
 
     commit_tracker.calculateDays()
 
+    commit_tracker.print_commit_summary()
+
     message.print_stats()
 
 if __name__ == "__main__":
     main() 
+
+
+    #TODO: Add complete REPO result to the screen
+    #TODO: Implement remainder logic and calendar system
