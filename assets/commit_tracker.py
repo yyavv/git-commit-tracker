@@ -54,7 +54,17 @@ class CommitTracker:
                 result_dates.append([None] * 25)
                 self.today += timedelta(days=7)  # Add extra 7 days for new word spacing
         
-        self.end_date = result_dates[-1][-1]  # Save the end date for later use
+        for col in range(len(result_dates[0]) - 1, -1, -1):
+            # Scan rows from bottom to top for each column
+            for row in range(len(result_dates) - 1, -1, -1):
+            # If there is a value in the cell, return it                 
+                if result_dates[row][col]:
+                    self.end_date = result_dates[row][col]
+                    break
+            
+            if self.end_date:
+                break
+
         self.print_result(result_dates)
         return result_dates
 
