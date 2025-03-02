@@ -7,6 +7,7 @@ from typing import List, Optional
 from tqdm import tqdm
 import time
 import subprocess
+import random
 
 class CommitTracker:
     def __init__(self, message_instance, target_year=None):
@@ -208,16 +209,21 @@ class CommitTracker:
         
         # Calculate total commits needed
         if enhance_visuals:
-            # For enhanced visuals, we'll create varying numbers of commits
-            total_commits = sum(
-                3 if commit_dates.index(date_str) % 3 == 0 else  # Every 3rd date gets 3 commits
-                5 if commit_dates.index(date_str) % 5 == 0 else  # Every 5th date gets 5 commits
-                1  # Other dates get 1 commit
-                for date_str in commit_dates
-            )
+            # For enhanced visuals with random commit counts
+            commit_counts = {}
+            total_commits = 0
+            
+            print("\nEnhancing pattern with random commit intensities (1-7 commits per date)")
+            for date_str in commit_dates:
+                # Randomly assign 1-7 commits for each date with weighted distribution
+                # More weight to lower numbers to make darker squares more rare and special
+                num_commits = random.choices([1, 2, 3, 4, 5, 6, 7], weights=[40, 25, 15, 10, 5, 3, 2])[0]
+                commit_counts[date_str] = num_commits
+                total_commits += num_commits
         else:
             # Without enhancement, one commit per date
             total_commits = len(commit_dates)
+            commit_counts = {date_str: 1 for date_str in commit_dates}
         
         # Create commits for each date
         print("\nCreating pattern commits...")
@@ -232,16 +238,7 @@ class CommitTracker:
                     commit_date = datetime.strptime(date_str, "%d-%m-%Y")
                     
                     # Determine number of commits for this date
-                    if enhance_visuals:
-                        idx = commit_dates.index(date_str)
-                        if idx % 5 == 0:
-                            num_commits = 5  # Every 5th date gets 5 commits (darker)
-                        elif idx % 3 == 0:
-                            num_commits = 3  # Every 3rd date gets 3 commits (medium)
-                        else:
-                            num_commits = 1  # Other dates get 1 commit (light)
-                    else:
-                        num_commits = base_num_commits
+                    num_commits = commit_counts[date_str]
                     
                     # Create the specified number of commits
                     for i in range(num_commits):
