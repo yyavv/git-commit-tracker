@@ -56,7 +56,7 @@ class Message:
                 counts[char] = sum(row.count('1') for row in letter.letter_data)
         return counts
 
-    def animate_message_by_row(self, delay=0.05, show_progress=False):
+    def animate_message(self, delay=0.05, show_progress=False):
         """Animate the message row by row with smooth scrolling."""
         # Clear console only on first animation
         if self._first_animation:
